@@ -8,3 +8,13 @@ main {
     width: 300px;
     max-width: 90%;
 }
+
+.roll--btn {
+    color: white;
+    background: #5035FF;
+    box-shadow: 0px 3.2px 7.68px rgba(0, 0, 0, 0.18);
+    border-radius: 3.81277px;  
+    padding: 1em 3em;
+    cursor: pointer;
+    border: none;
+}

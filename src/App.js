@@ -1,32 +1,45 @@
 import { useState } from 'react';
 import './App.css';
 import Die from './Components/Die';
+//NANOID -> NPM PACKAGE TO GENERATE RANDOM ID FOR KEY PROPERTY PURPOSES
+import { nanoid } from 'nanoid'
 
 function App() {
 
+  //CREATES AN ARRAY OF OBJECTS OF 10 RANDOM NUMBERS B/N 1-6
   const allNewDice = () => {
-    //CREATES AN ARRAY OF 10 RANDOM NUMBERS B/N 1-6
-    const randomArray = Array.from({length: 10}, () => {
-      return Math.floor(Math.random() * 6 + 1)
-    }) 
+    const randomArray = [];
+    for (let i=0; i<10; i++) {
+      randomArray.push({
+        value: Math.floor(Math.random() * 6 + 1),
+        isHeld: false,
+        id: nanoid()
+      })
+    }
     return randomArray
   }
+  console.log(allNewDice())
 
   const [die, setDie] = useState(allNewDice)
 
-  //WILL DISPLAY EACH VALUE FROM THE ARRAY IN EACH DIE COMPONENT (VALUE PASSED DOWN AS PROPS)
-  const dieElement = die.map((e) => {
-    return <Die value={e} />
-  })
+  const rollDice = () => {
+    setDie(allNewDice())
+  }
 
-  // const allNewDice = () => {
-  //   const randomArray = []
-  //   for (let i=0; i<10; i++) {
-  //     randomArray.push(Math.floor(Math.random() * (7-1) + 1))
-  //   }
-  //   return randomArray
-  // }
-  // console.log(allNewDice())
+  const holdDice = (diceId) => {
+    //IF THE DIE IS PRESSED, NOW ITS STATUS WILL CHANGE TO OPPOSITE OF ISHELD
+    setDie((prev) => {
+      return prev.map((e) => {
+        console.log(e.id === diceId ? {...e, isHeld: !e.isHeld} : e)
+        return e.id === diceId ? {...e, isHeld: !e.isHeld} : e
+      })
+    })
+  }
+
+    //WILL DISPLAY EACH VALUE FROM THE ARRAY IN EACH DIE COMPONENT (VALUE PASSED DOWN AS PROPS)
+    const dieElement = die.map((e) => {
+      return <Die value={e.value} isHeld={e.isHeld} key={e.id} holdDice={() => holdDice(e.id)}/>
+    })
 
   return (
     <div>
@@ -34,6 +47,7 @@ function App() {
       <main>
         {dieElement}
       </main>
+      <button className="roll--btn" onClick={rollDice}>Roll</button>
     </div>
   )
 }
