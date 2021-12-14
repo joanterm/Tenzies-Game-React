@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Die from './Components/Die';
 //NANOID -> NPM PACKAGE TO GENERATE RANDOM ID FOR KEY PROPERTY PURPOSES
@@ -21,29 +21,54 @@ function App() {
   console.log(allNewDice())
 
   const [die, setDie] = useState(allNewDice)
+  const [tenzies, setTenzies] = useState(false)
 
   const rollDice = () => {
-    setDie(allNewDice())
+    // IF THE DIE IS ROLLED AND ISHELD STATUS IS TRUE, IT WILL HOLD THAT DIE OR ELSE RETURN RANDOM DIE
+    setDie((prev) => {
+      return prev.map((e) => {
+        return e.isHeld ? e : {
+          value: Math.floor(Math.random() * 6 + 1),
+          isHeld: false,
+          id: nanoid()
+        }
+      })
+    })
   }
 
   const holdDice = (diceId) => {
     //IF THE DIE IS PRESSED, NOW ITS STATUS WILL CHANGE TO OPPOSITE OF ISHELD
     setDie((prev) => {
       return prev.map((e) => {
-        console.log(e.id === diceId ? {...e, isHeld: !e.isHeld} : e)
+        // console.log(e.id === diceId ? {...e, isHeld: !e.isHeld} : e)
         return e.id === diceId ? {...e, isHeld: !e.isHeld} : e
       })
     })
   }
-
     //WILL DISPLAY EACH VALUE FROM THE ARRAY IN EACH DIE COMPONENT (VALUE PASSED DOWN AS PROPS)
     const dieElement = die.map((e) => {
       return <Die value={e.value} isHeld={e.isHeld} key={e.id} holdDice={() => holdDice(e.id)}/>
     })
 
+    //IF ALL DICE ARE ROLLED AND ISHELD IS TRUE FOR EVERY AND VALUES ARE THE SAME, IT WILL END GAME
+    useEffect(() => {
+      const allHeld = die.every((e) => {
+        return e.isHeld 
+      })
+      const firstValue = die[0].value
+      const allSameValue = die.every((e) => {
+        return e.value === firstValue
+      })
+      if (allHeld && allSameValue) {
+        setTenzies(true)
+        console.log("won")
+      }
+    }, [die])
+
   return (
     <div>
       <h1>Tenzies game</h1>
+      <p className="instructions">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
       <main>
         {dieElement}
       </main>
