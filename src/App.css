@@ -4,17 +4,25 @@ main {
     align-items: center;
     flex-wrap: wrap;
     margin: 0 auto;
-    border: 3px solid forestgreen;
     width: 300px;
     max-width: 90%;
 }
 
+.content {
+    margin-top: 2em;
+}
+
 .roll--btn {
     color: white;
-    background: #5035FF;
+    background: #9e227f;
     box-shadow: 0px 3.2px 7.68px rgba(0, 0, 0, 0.18);
     border-radius: 3.81277px;  
     padding: 1em 3em;
     cursor: pointer;
     border: none;
+    margin-top: 2em;
+}
+
+.roll--btn:hover {
+    background: #8a2871;
 }

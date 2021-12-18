@@ -3,6 +3,8 @@ import './App.css';
 import Die from './Components/Die';
 //NANOID -> NPM PACKAGE TO GENERATE RANDOM ID FOR KEY PROPERTY PURPOSES
 import { nanoid } from 'nanoid'
+//CONFETTI -> NPM PACKAGE
+import Confetti from 'react-confetti'
 
 function App() {
 
@@ -45,6 +47,11 @@ function App() {
       })
     })
   }
+
+  const newGame = () => {
+    setTenzies(false)
+    setDie(allNewDice)
+  }
     //WILL DISPLAY EACH VALUE FROM THE ARRAY IN EACH DIE COMPONENT (VALUE PASSED DOWN AS PROPS)
     const dieElement = die.map((e) => {
       return <Die value={e.value} isHeld={e.isHeld} key={e.id} holdDice={() => holdDice(e.id)}/>
@@ -66,13 +73,16 @@ function App() {
     }, [die])
 
   return (
-    <div>
+    <div className="content">
       <h1>Tenzies game</h1>
       <p className="instructions">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
       <main>
         {dieElement}
       </main>
-      <button className="roll--btn" onClick={rollDice}>Roll</button>
+      {tenzies ? <button className="roll--btn" onClick={newGame}>New Game</button> : <button className="roll--btn" onClick={rollDice}>Roll</button>} 
+      {/* OR:
+      <button className="roll--btn" onClick={rollDice}>{tenzies ? "New Game" : "Roll"}</button> */}
+      {tenzies ? <Confetti /> : ""}
     </div>
   )
 }
