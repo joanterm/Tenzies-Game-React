@@ -8,7 +8,7 @@ import Confetti from 'react-confetti'
 
 function App() {
 
-  //CREATES AN ARRAY OF OBJECTS OF 10 RANDOM NUMBERS B/N 1-6
+  // CREATES AN ARRAY OF OBJECTS OF 10 RANDOM NUMBERS B/N 1-6
   const allNewDice = () => {
     const randomArray = [];
     for (let i=0; i<10; i++) {
@@ -37,6 +37,10 @@ function App() {
       })
     })
   }
+    //WILL DISPLAY EACH VALUE FROM THE ARRAY IN EACH DIE COMPONENT (VALUE PASSED DOWN AS PROPS)
+    const dieElement = die.map((e) => {
+    return <Die value={e.value} isHeld={e.isHeld} key={e.id} holdDice={() => holdDice(e.id)}/>
+  })
 
   const holdDice = (diceId) => {
     //IF THE DIE IS PRESSED, NOW ITS STATUS WILL CHANGE TO OPPOSITE OF ISHELD
@@ -52,10 +56,6 @@ function App() {
     setTenzies(false)
     setDie(allNewDice)
   }
-    //WILL DISPLAY EACH VALUE FROM THE ARRAY IN EACH DIE COMPONENT (VALUE PASSED DOWN AS PROPS)
-    const dieElement = die.map((e) => {
-      return <Die value={e.value} isHeld={e.isHeld} key={e.id} holdDice={() => holdDice(e.id)}/>
-    })
 
     //IF ALL DICE ARE ROLLED AND ISHELD IS TRUE FOR EVERY AND VALUES ARE THE SAME, IT WILL END GAME
     useEffect(() => {
